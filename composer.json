@@ -1,0 +1,14 @@
+{
+    "name": "johnmccracken/postcode-crimes",
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.0",
+        "phpunit/phpunit": "4.8.35"
+    },
+    "authors": [
+        {
+            "name": "John McCracken",
+            "email": "johnmccuk@gmail.com"
+        }
+    ],
+    "require": {}
+}
