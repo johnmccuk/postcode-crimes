@@ -67,4 +67,31 @@ class PostcodeLoader
     {
         return trim(strtoupper(str_replace(' ', '', $postcode)));
     }
+
+    /**
+    * Retrieve and return a Collection of formatted postcodes
+    * @method extendPostcodeData
+    * @param GuzzleHttp\Client $client
+    * @param Doctrine\Common\Collections\ArrayCollection $postcode
+    * @return Doctrine\Common\Collections\ArrayCollection
+    */
+    public function extendPostcodeData(\GuzzleHttp\Client $client, \Doctrine\Common\Collections\ArrayCollection $postcodes)
+    {
+        $response = $client->post(
+            'api.postcodes.io/postcodes',
+            ['json' => ["postcodes" => $postcodes->toArray()]]
+        );
+
+        if ($response->getStatusCode() != "200") {
+            throw new Exception('Invalid API call '. $response->getBody()->getContents());
+        }
+
+        $responseValues = json_decode($response->getBody()->getContents(), true);
+        $data = [];
+        foreach ($responseValues['result'] as $key => $responseValue) {
+            $data[] = $responseValue['result'];
+        }
+
+        return new ArrayCollection($data);
+    }
 }
