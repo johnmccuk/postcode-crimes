@@ -10,12 +10,12 @@ use \Doctrine\Common\Collections\ArrayCollection;
  * Class for loading, validating and formatting postcodes from a file
  *
  * Note: validation not required due to specifications
- * @class PostcodeLoader
+ * @class PostcodeData
  * @since 07/06/2017
  * @author John McCracken <johnmccuk@gmail.com>
  * @link https://github.com/johnmccuk/postcode-crimes
  */
-class PostcodeLoader
+class PostcodeData
 {
     protected $postcodes;
 
@@ -87,6 +87,7 @@ class PostcodeLoader
         }
 
         $responseValues = json_decode($response->getBody()->getContents(), true);
+
         $data = [];
         foreach ($responseValues['result'] as $key => $responseValue) {
             $data[] = $responseValue['result'];
