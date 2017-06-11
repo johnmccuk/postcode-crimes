@@ -41,26 +41,51 @@ class PostcodeCrimeData
         $this->toDate = $toDate;
     }
 
+    /**
+    * Getter for the objects postcode
+    * @method getPostcode
+    * @return string
+    */
     public function getPostcode()
     {
         return $this->postcode['postcode'];
     }
 
+    /**
+    * Getter for the objects Longitude
+    * @method getLongitude
+    * @return string
+    */
     public function getLongitude()
     {
         return $this->postcode['longitude'];
     }
 
+    /**
+    * Getter for the objects Latitude
+    * @method getLatitude
+    * @return string
+    */
     public function getLatitude()
     {
         return $this->postcode['latitude'];
     }
 
+    /**
+    * Getter for the objects 'from' date range
+    * @method getFromDate
+    * @return DateTime
+    */
     public function getFromDate()
     {
         return $this->fromDate;
     }
 
+    /**
+    * Getter for the objects 'to' date range
+    * @method getToDate
+    * @return DateTime
+    */
     public function getToDate()
     {
         return $this->toDate;
