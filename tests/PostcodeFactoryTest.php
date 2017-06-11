@@ -89,7 +89,7 @@ class PostcodeFactoryTest extends TestCase
         $mockedGuzzle->method('post')
              ->willReturn(new \GuzzleHttp\Psr7\Response(200, [], $mockedResponseText));
         
-        $result = $this->mockedPostcodeFactory->extendPostcodeFactory($mockedGuzzle, $this->mockedPostcodeFactory->retrievePostcodes());
+        $result = $this->mockedPostcodeFactory->generatePostcodeCrimeData($mockedGuzzle, $this->mockedPostcodeFactory->retrievePostcodes());
         
         $this->assertEquals(3, $result->count());
 

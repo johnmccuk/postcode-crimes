@@ -73,12 +73,14 @@ class PostcodeFactory
 
     /**
     * Retrieve and return a Collection of PostcodeCrimeData objects
-    * @method extendPostcodeFactory
+    * @method generatePostcodeCrimeData
     * @param GuzzleHttp\Client $client
     * @param Doctrine\Common\Collections\ArrayCollection $postcode
+    * @param DateTime $fromDate
+    * @param DateTime $toDate
     * @return Doctrine\Common\Collections\ArrayCollection
     */
-    public function extendPostcodeFactory(\GuzzleHttp\Client $client, \Doctrine\Common\Collections\ArrayCollection $postcodes)
+    public function generatePostcodeCrimeData(\GuzzleHttp\Client $client, \Doctrine\Common\Collections\ArrayCollection $postcodes, DateTime $fromDate, DateTime $toDate)
     {
         $response = $client->post(
             'api.postcodes.io/postcodes',
@@ -92,11 +94,9 @@ class PostcodeFactory
         $responseValues = json_decode($response->getBody()->getContents(), true);
 
         $data = [];
-        $from = new DateTime('2016-01-01');
-        $to = new DateTime('2016-12-31');
 
         foreach ($responseValues['result'] as $key => $responseValue) {
-            $data[] = new PostcodeCrimeData($client, $responseValue['result'], $from, $to);
+            $data[] = new PostcodeCrimeData($client, $responseValue['result'], $fromDate, $toDate);
         }
 
         return new ArrayCollection($data);
