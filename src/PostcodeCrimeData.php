@@ -16,7 +16,7 @@ use \Datetime;
  */
 class PostcodeCrimeData
 {
-    protected $postcode;
+    protected $postcodeData;
     protected $client;
 
     /**
@@ -35,7 +35,7 @@ class PostcodeCrimeData
             throw new Exception('invalid coordinates');
         }
 
-        $this->postcode = $postcode;
+        $this->postcodeData = $postcode;
         $this->client = $client;
         $this->fromDate = $fromDate;
         $this->toDate = $toDate;
@@ -48,7 +48,7 @@ class PostcodeCrimeData
     */
     public function getPostcode()
     {
-        return $this->postcode['postcode'];
+        return $this->postcodeData['postcode'];
     }
 
     /**
@@ -58,7 +58,7 @@ class PostcodeCrimeData
     */
     public function getLongitude()
     {
-        return $this->postcode['longitude'];
+        return $this->postcodeData['longitude'];
     }
 
     /**
@@ -68,7 +68,7 @@ class PostcodeCrimeData
     */
     public function getLatitude()
     {
-        return $this->postcode['latitude'];
+        return $this->postcodeData['latitude'];
     }
 
     /**
