@@ -101,4 +101,36 @@ class PostcodeFactory
 
         return new ArrayCollection($data);
     }
+
+    /**
+    * Exports Postcode Statistics to a CSV file
+    * @method exportToCsvFile
+    * @param Doctrine\Common\Collections\ArrayCollection $postcodes
+    * @param string $filepath
+    * @return boolean
+    */
+    public function exportToCsvFile(\Doctrine\Common\Collections\ArrayCollection $postcodes, $filepath)
+    {
+        try {
+            $values = [['postcode', 'category', 'average']];
+
+            foreach ($postcodes as $key => $postcode) {
+                $values[] = [
+                    $postcode->getPostcode(),
+                    $postcode->getMostCommonCrime(),
+                    $postcode->getMostCommonCrimeAverage()
+                ];
+            }
+
+            $fp = fopen($filepath, 'w');
+
+            foreach ($values as $fields) {
+                fputcsv($fp, $fields);
+            }
+            fclose($fp);
+        } catch (Exception $e) {
+            return false;
+        }
+        return true;
+    }
 }
