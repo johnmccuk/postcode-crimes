@@ -89,7 +89,7 @@ class PostcodeFactoryTest extends TestCase
         $mockedGuzzle->method('post')
              ->willReturn(new \GuzzleHttp\Psr7\Response(200, [], $mockedResponseText));
         
-        $result = $this->mockedPostcodeFactory->generatePostcodeCrimeData($mockedGuzzle, $this->mockedPostcodeFactory->retrievePostcodes());
+        $result = $this->mockedPostcodeFactory->generatePostcodeCrimeData($mockedGuzzle, $this->mockedPostcodeFactory->retrievePostcodes(), new DateTime('2016-01-01'), new DateTime('2016-03-31'));
         
         $this->assertEquals(3, $result->count());
 
@@ -105,7 +105,7 @@ class PostcodeFactoryTest extends TestCase
 
         $last = $first->getToDate();
         $this->assertEquals('DateTime', get_class($last));
-        $this->assertEquals('2016-12-31', $last->format('Y-m-d'));
+        $this->assertEquals('2016-03-31', $last->format('Y-m-d'));
 
         $last = $result->last();
         $this->assertEquals('johnmccuk\PostcodeCrimeData', get_class($last));
@@ -119,6 +119,6 @@ class PostcodeFactoryTest extends TestCase
 
         $last = $last->getToDate();
         $this->assertEquals('DateTime', get_class($last));
-        $this->assertEquals('2016-12-31', $last->format('Y-m-d'));
+        $this->assertEquals('2016-03-31', $last->format('Y-m-d'));
     }
 }
