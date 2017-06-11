@@ -23,8 +23,10 @@ class PostcodeCrimeData
     protected $crimeData;
     protected $commonCrimeMonthlyTotals = [];
     protected $crimeCounts = [];
-    public $mostCommonCrime;
-    public $mostCommonCrimeAverage;
+    protected $mostCommonCrime;
+    protected $mostCommonCrimeAverage;
+    protected $fromDate;
+    protected $toDate;
 
     /**
     * @method __construct
@@ -101,11 +103,41 @@ class PostcodeCrimeData
         return $this->toDate;
     }
 
+    /**
+    * Getter for the objects 'crimeData' values
+    * @method getCrimeData
+    * @return array
+    */
     public function getCrimeData()
     {
         return $this->crimeData;
     }
 
+    /**
+    * Getter for the objects 'mostCommonCrime' value
+    * @method getMostCommonCrime
+    * @return string
+    */
+    public function getMostCommonCrime()
+    {
+        return $this->mostCommonCrime;
+    }
+
+    /**
+    * Getter for the objects 'mostCommonCrimeAverage' value
+    * @method getMostCommonCrimeAverage
+    * @return float
+    */
+    public function getMostCommonCrimeAverage()
+    {
+        return $this->mostCommonCrimeAverage;
+    }
+
+    /**
+    * Iterate and calculate the crime data for each month
+    * @method retrieveCrimeData
+    * @return null
+    */
     protected function retrieveCrimeData()
     {
         $startDate = clone $this->fromDate;
@@ -121,6 +153,12 @@ class PostcodeCrimeData
         }
     }
 
+    /**
+    * Iterate and calculate the crime data for each month
+    * @method getMonthlyCrimes
+    * @param DateTime $date
+    * @return array
+    */
     protected function getMonthlyCrimes(DateTime $date)
     {
         $baseUrl = 'https://data.police.uk/api/crimes-street/all-crime?';
@@ -141,6 +179,12 @@ class PostcodeCrimeData
         return json_decode($response->getBody()->getContents(), true);
     }
 
+
+    /**
+    * Calculate the relevant Crime statistics
+    * @method calculateCrimeStatistics
+    * @return null
+    */
     protected function calculateCrimeStatistics()
     {
         foreach ($this->crimeData as $key => $monthlyData) {
@@ -159,6 +203,12 @@ class PostcodeCrimeData
         $this->mostCommonCrimeAverage = round(array_sum($monthlyCounts) / count($monthlyCounts), 1);
     }
 
+    /**
+    * from the passed array, calculate how many times each crime occurrs
+    * @method countMonthlyCrimes
+    * @param array $monthlyCrimes
+    * @return null
+    */
     protected function countMonthlyCrimes(array $monthlyCrimes)
     {
         foreach ($monthlyCrimes as $key => $crime) {
@@ -171,6 +221,13 @@ class PostcodeCrimeData
         }
     }
 
+    /**
+    * Iterate and calculate the crime data for each month
+    * @method countMonthlyCommonCrimesCount
+    * @param array $monthlyCrimes
+    * @param string $commonCrime crime category
+    * @return integer
+    */
     protected function countMonthlyCommonCrimesCount(array $monthlyCrimes, $commonCrime)
     {
         $count = 0;

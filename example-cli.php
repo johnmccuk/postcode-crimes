@@ -12,5 +12,5 @@ $postcodeFactory = new PostcodeFactory(getcwd() . '/data/postcodes.txt');
 $postcodes = $postcodeFactory->extendPostcodeFactory(new GuzzleHttp\Client(), $postcodeFactory->retrievePostcodes());
 
 foreach ($postcodes as $key => $postcode) {
-    echo 'Postcode ' . $postcode->getPostcode() .' most common crime is '. $postcode->mostCommonCrime . 'with an average of '. $postcode->mostCommonCrimeAverage . " per month \n";
+   // echo 'Postcode ' . $postcode->getPostcode() .' most common crime is '. $postcode->mostCommonCrime . 'with an average of '. $postcode->mostCommonCrimeAverage . " per month \n";
 }

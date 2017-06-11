@@ -69,11 +69,11 @@ class PostcodeCrimeDataTest extends TestCase
 
     public function testCommonCrimeCorrect()
     {
-        $this->assertEquals('anti-social-behaviour', $this->PostcodeCrimeData->mostCommonCrime);
+        $this->assertEquals('anti-social-behaviour', $this->PostcodeCrimeData->getMostCommonCrime());
     }
 
     public function testMostCommonCrimeAverage()
     {
-        $this->assertEquals('1.3', $this->PostcodeCrimeData->mostCommonCrimeAverage);
+        $this->assertEquals('1.3', $this->PostcodeCrimeData->getMostCommonCrimeAverage());
     }
 }
