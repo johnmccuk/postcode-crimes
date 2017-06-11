@@ -191,10 +191,12 @@ class PostcodeCrimeData
             $this->countMonthlyCrimes($monthlyData);
         }
 
+        //select the category with the highest count
         arsort($this->crimeCounts);
         reset($this->crimeCounts);
         $this->mostCommonCrime = key($this->crimeCounts);
 
+        //work out the average for the most common crime
         $monthlyCounts = [];
         foreach ($this->crimeData as $key => $monthlyData) {
             $monthlyCounts[] = $this->countMonthlyCommonCrimesCount($monthlyData, $this->mostCommonCrime);
