@@ -22,6 +22,8 @@ class PostcodeCrimeData
     protected $client;
     protected $crimeData;
     protected $crimeCounts = [];
+    protected $commonCrimeMonthlyTotals = [];
+    public $mostCommonCrime;
 
     /**
     * @method __construct
@@ -149,6 +151,14 @@ class PostcodeCrimeData
         foreach ($this->crimeData as $key => $monthlyData) {
             $this->countMonthlyCrimes($monthlyData);
         }
+
+        arsort($this->crimeCounts);
+        reset($this->crimeCounts);
+        $this->mostCommonCrime = key($this->crimeCounts);
+
+        foreach ($this->crimeData as $key => $monthlyData) {
+            $this->countMonthlyCommonCrimesCount($monthlyData, $this->mostCommonCrime);
+        }
     }
 
     protected function countMonthlyCrimes(array $monthlyCrimes)
@@ -161,5 +171,10 @@ class PostcodeCrimeData
 
             $this->crimeCounts[$crime['category']]++;
         }
+    }
+
+    protected function countMonthlyCommonCrimesCount(array $monthlyCrime, $commonCrime)
+    {
+
     }
 }
