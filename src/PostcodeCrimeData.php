@@ -5,6 +5,8 @@ require 'vendor/autoload.php';
 
 use \Exception;
 use \Datetime;
+use \DateInterval;
+use \DatePeriod;
 
 /**
  * Class for holding a single postcodes related crime data data
@@ -18,6 +20,8 @@ class PostcodeCrimeData
 {
     protected $postcodeData;
     protected $client;
+    protected $crimeData;
+    protected $crimeCounts = [];
 
     /**
     * @method __construct
@@ -39,6 +43,9 @@ class PostcodeCrimeData
         $this->client = $client;
         $this->fromDate = $fromDate;
         $this->toDate = $toDate;
+
+        $this->retrieveCrimeData();
+        $this->calculateCrimeStatistics();
     }
 
     /**
@@ -91,5 +98,68 @@ class PostcodeCrimeData
         return $this->toDate;
     }
 
-    //protected function getPreviousYEar
+    public function getCrimeData()
+    {
+        return $this->crimeData;
+    }
+
+    public function getCrimeCounts()
+    {
+        return $this->crimeCounts;
+    }
+
+    protected function retrieveCrimeData()
+    {
+        $startDate = clone $this->fromDate;
+        $interval = new DateInterval('P1M');
+        $daterange = new DatePeriod($startDate, $interval, $this->toDate);
+
+        foreach ($daterange as $date) {
+            try {
+                $this->crimeData[] = $this->getMonthlyCrimes($date);
+            } catch (Exception $e) {
+                continue;
+            }
+        }
+    }
+
+    protected function getMonthlyCrimes(DateTime $date)
+    {
+        $baseUrl = 'https://data.police.uk/api/crimes-street/all-crime?';
+
+        $requestParams = [
+            'lat' => $this->postcodeData['latitude'],
+            'lng' => $this->postcodeData['longitude'],
+            'date' => $date->format('Y-m'),
+        ];
+
+        $url = $baseUrl. http_build_query($requestParams);
+
+        $response = $this->client->get($url);
+
+        if ($response->getStatusCode() != "200") {
+            throw new Exception('Invalid API call '. $response->getStatusCode());
+        }
+
+        return json_decode($response->getBody()->getContents(), true);
+    }
+
+    protected function calculateCrimeStatistics()
+    {
+        foreach ($this->crimeData as $key => $monthlyData) {
+            $this->countMonthlyCrimes($monthlyData);
+        }
+    }
+
+    protected function countMonthlyCrimes(array $monthlyCrimes)
+    {
+        foreach ($monthlyCrimes as $key => $crime) {
+            if (array_key_exists($crime['category'], $this->crimeCounts) == false) {
+                $this->crimeCounts[$crime['category']] = 1;
+                continue;
+            }
+
+            $this->crimeCounts[$crime['category']]++;
+        }
+    }
 }
