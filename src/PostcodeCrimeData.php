@@ -21,9 +21,10 @@ class PostcodeCrimeData
     protected $postcodeData;
     protected $client;
     protected $crimeData;
-    protected $crimeCounts = [];
     protected $commonCrimeMonthlyTotals = [];
+    protected $crimeCounts = [];
     public $mostCommonCrime;
+    public $mostCommonCrimeAverage;
 
     /**
     * @method __construct
@@ -105,11 +106,6 @@ class PostcodeCrimeData
         return $this->crimeData;
     }
 
-    public function getCrimeCounts()
-    {
-        return $this->crimeCounts;
-    }
-
     protected function retrieveCrimeData()
     {
         $startDate = clone $this->fromDate;
@@ -142,7 +138,6 @@ class PostcodeCrimeData
         if ($response->getStatusCode() != "200") {
             throw new Exception('Invalid API call '. $response->getStatusCode());
         }
-
         return json_decode($response->getBody()->getContents(), true);
     }
 
@@ -156,9 +151,12 @@ class PostcodeCrimeData
         reset($this->crimeCounts);
         $this->mostCommonCrime = key($this->crimeCounts);
 
+        $monthlyCounts = [];
         foreach ($this->crimeData as $key => $monthlyData) {
-            $this->countMonthlyCommonCrimesCount($monthlyData, $this->mostCommonCrime);
+            $monthlyCounts[] = $this->countMonthlyCommonCrimesCount($monthlyData, $this->mostCommonCrime);
         }
+
+        $this->mostCommonCrimeAverage = round(array_sum($monthlyCounts) / count($monthlyCounts), 1);
     }
 
     protected function countMonthlyCrimes(array $monthlyCrimes)
@@ -173,8 +171,14 @@ class PostcodeCrimeData
         }
     }
 
-    protected function countMonthlyCommonCrimesCount(array $monthlyCrime, $commonCrime)
+    protected function countMonthlyCommonCrimesCount(array $monthlyCrimes, $commonCrime)
     {
-
+        $count = 0;
+        foreach ($monthlyCrimes as $key => $crime) {
+            if ($crime['category'] == $commonCrime) {
+                $count++;
+            }
+        }
+        return $count;
     }
 }
