@@ -1,12 +1,12 @@
 # postcode-crimes
 Demo which accepts a txt file of postcodes and returns the most common crime and monthly average from the supplied date range year.
 
+Has been tested on php 5.6
+
 ## Requirements
 ***PHP Curl***
 
 See your specific operating system package manager
-
-Has been tested on php 5.6
 
 ***Composer*** 
 
