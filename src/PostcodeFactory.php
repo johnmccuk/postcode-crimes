@@ -2,20 +2,23 @@
 namespace johnmccuk;
 
 require_once 'vendor/autoload.php';
+require_once 'src/PostcodeCrimeData.php';
 
 use \Exception;
+use \Datetime;
 use \Doctrine\Common\Collections\ArrayCollection;
+use johnmccuk\PostcodeCrimeData;
 
 /**
  * Class for loading, validating and formatting postcodes from a file
  *
  * Note: validation not required due to specifications
- * @class PostcodeData
+ * @class PostcodeFactory
  * @since 07/06/2017
  * @author John McCracken <johnmccuk@gmail.com>
  * @link https://github.com/johnmccuk/postcode-crimes
  */
-class PostcodeData
+class PostcodeFactory
 {
     protected $postcodes;
 
@@ -69,13 +72,13 @@ class PostcodeData
     }
 
     /**
-    * Retrieve and return a Collection of formatted postcodes
-    * @method extendPostcodeData
+    * Retrieve and return a Collection of PostcodeCrimeData objects
+    * @method extendPostcodeFactory
     * @param GuzzleHttp\Client $client
     * @param Doctrine\Common\Collections\ArrayCollection $postcode
     * @return Doctrine\Common\Collections\ArrayCollection
     */
-    public function extendPostcodeData(\GuzzleHttp\Client $client, \Doctrine\Common\Collections\ArrayCollection $postcodes)
+    public function extendPostcodeFactory(\GuzzleHttp\Client $client, \Doctrine\Common\Collections\ArrayCollection $postcodes)
     {
         $response = $client->post(
             'api.postcodes.io/postcodes',
@@ -89,8 +92,11 @@ class PostcodeData
         $responseValues = json_decode($response->getBody()->getContents(), true);
 
         $data = [];
+        $from = new DateTime('2016-01-01');
+        $to = new DateTime('2016-12-31');
+
         foreach ($responseValues['result'] as $key => $responseValue) {
-            $data[] = $responseValue['result'];
+            $data[] = new PostcodeCrimeData($client, $responseValue['result'], $from, $to);
         }
 
         return new ArrayCollection($data);
