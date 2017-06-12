@@ -63,6 +63,7 @@ class PostcodeFactory
     public function retrieveFileData()
     {
         if (file_exists($this->path) === false) {
+            syslog(LOG_WARNING, __FILE__ . ' '. __FUNCTION__ .'() '. __LINE__ . ' File doesnt exist '. $path);
             throw new Exception('File doesnt exist '. $path);
         }
         return file($this->path, FILE_IGNORE_NEW_LINES);
@@ -109,6 +110,7 @@ class PostcodeFactory
             try {
                 $data[] = new PostcodeCrimeData($client, $responseValue['result'], $fromDate, $toDate);
             } catch (Exception $e) {
+                syslog(LOG_WARNING, __FILE__ . ' '. __FUNCTION__ .'() '. __LINE__ . ' '. $e->getMessage());
                 continue;
             }
         }
@@ -148,6 +150,7 @@ class PostcodeFactory
             if (isset($fp)) {
                 fclose($fp);
             }
+            syslog(LOG_WARNING, __FILE__ . ' '. __FUNCTION__ .'() '. __LINE__ . ' '. $e->getMessage());
             return false;
         }
         return true;

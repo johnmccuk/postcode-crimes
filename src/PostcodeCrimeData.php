@@ -159,6 +159,7 @@ class PostcodeCrimeData
             try {
                 $this->crimeData[] = $this->getMonthlyCrimes($date);
             } catch (Exception $e) {
+                syslog(LOG_WARNING, __FILE__ . ' '. __FUNCTION__ .'() '. __LINE__ . ' '. $e->getMessage());
                 continue;
             }
         }
@@ -185,6 +186,7 @@ class PostcodeCrimeData
         $response = $this->client->get($url);
 
         if ($response->getStatusCode() != "200") {
+            syslog(LOG_WARNING, __FILE__ . ' '. __FUNCTION__ .'() '. __LINE__ . ' '. $response->getStatusCode() . ' '. $response->getBody()->getContents());
             throw new Exception('Invalid API call '. $response->getStatusCode());
         }
         return json_decode($response->getBody()->getContents(), true);
