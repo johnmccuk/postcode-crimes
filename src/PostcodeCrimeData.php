@@ -9,7 +9,7 @@ use \DateInterval;
 use \DatePeriod;
 
 /**
- * Class for holding a single postcodes related crime data data
+ * Class for holding a single postcodes and its related crime data data
  *
  * @class PostcodeCrimeData
  * @since 07/06/2017
@@ -18,6 +18,17 @@ use \DatePeriod;
  */
 class PostcodeCrimeData
 {
+    /*
+    * @var array $postcodeData
+    * @var GuzzleHttp\Client $client
+    * @var array $crimeData
+    * @var array $commonCrimeMonthlyTotals
+    * @var array $crimeCounts
+    * @var string $mostCommonCrime
+    * @var float $mostCommonCrimeAverage
+    * @var DateTime $fromDate
+    * @var DateTime $toDate
+    */
     protected $postcodeData;
     protected $client;
     protected $crimeData;
@@ -181,7 +192,7 @@ class PostcodeCrimeData
 
 
     /**
-    * Calculate the relevant Crime statistics
+    * Calculate the relevant crime statistics
     * @method calculateCrimeStatistics
     * @return null
     */
@@ -218,7 +229,6 @@ class PostcodeCrimeData
                 $this->crimeCounts[$crime['category']] = 1;
                 continue;
             }
-
             $this->crimeCounts[$crime['category']]++;
         }
     }
