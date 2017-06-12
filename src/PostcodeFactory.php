@@ -48,6 +48,10 @@ class PostcodeFactory
     {
         if (empty($this->postcode)) {
             foreach ($this->retrieveFileData() as $key => $postcode) {
+                if ($this->checkValidPostcode($postcode) === false) {
+                    syslog(LOG_WARNING, __FILE__ . ' '. __FUNCTION__ .'() '. __LINE__ . ' Invald postcode '. $postcode);
+                    continue;
+                }
                 $this->postcodes[] = $this->formatPostcode($postcode);
             }
         }
@@ -77,9 +81,23 @@ class PostcodeFactory
     * @param string $postcode
     * @return string
     */
-    public function formatPostcode($postcode)
+    protected function formatPostcode($postcode)
     {
         return trim(strtoupper(str_replace(' ', '', $postcode)));
+    }
+
+    /**
+    * Check the postcode appears to be valid
+    *
+    * Removes the spaces and makes uppercase
+    * @method checkValidPostcode
+    * @param string $postcode
+    * @return boolean
+    */
+    protected function checkValidPostcode($postcode)
+    {
+        $regExp = "/^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][‌​0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z])))) ?[0-9][A-Za-z]{2})$/";
+        return (preg_match($regExp, $postcode) === false) ? false : true;
     }
 
     /**
