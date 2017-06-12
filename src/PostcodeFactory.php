@@ -129,7 +129,7 @@ class PostcodeFactory
             $values = [['postcode', 'category', 'average']];
 
             foreach ($postcodes as $key => $postcode) {
-                if (get_class($postcode) != 'PostcodeCrimeData') {
+                if (get_class($postcode) != 'johnmccuk\PostcodeCrimeData') {
                     continue;
                 }
                 $values[] = [
