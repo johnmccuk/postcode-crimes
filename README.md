@@ -1,6 +1,9 @@
 # postcode-crimes
 Demo which accepts a txt file of postcodes and returns the most common crime and monthly average from the supplied date range year.
 
+See `src/postcodes.txt` for an example input file.
+See `src/postcodes-example-output.csv` for an example output file.
+
 Has been tested on php 5.6
 
 ## Requirements
@@ -25,7 +28,8 @@ From the command line
 
 `php -f example-cli.php`
 
-## Example
+## Example Usage
+
 ```
 require_once 'src/PostcodeFactory.php';
 require_once 'src/CrimeData.php';
