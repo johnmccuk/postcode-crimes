@@ -4,11 +4,7 @@ Demo which accepts a txt file of postcodes and returns the most common crime and
 Has been tested on php 5.6
 
 ## Requirements
-***PHP Curl***
-
-See your specific operating system package manager
-
-***Composer*** 
+***Composer***
 
 `curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer`
 
