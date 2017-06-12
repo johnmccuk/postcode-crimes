@@ -112,7 +112,6 @@ class PostcodeFactory
                 continue;
             }
         }
-
         return new ArrayCollection($data);
     }
 
