@@ -10,9 +10,12 @@ use \Doctrine\Common\Collections\ArrayCollection;
 use johnmccuk\PostcodeCrimeData;
 
 /**
- * Class for loading, validating and formatting postcodes from a file
+ * Class for creating, manipulating a Collection of Postcode Crime data
  *
- * Note: validation not required due to specifications
+ * Accepts a path to a file containing postcodes (one per line).
+ *
+ * Note: validation not required due to specifications.
+ *
  * @class PostcodeFactory
  * @since 07/06/2017
  * @author John McCracken <johnmccuk@gmail.com>
@@ -20,7 +23,12 @@ use johnmccuk\PostcodeCrimeData;
  */
 class PostcodeFactory
 {
+    /*
+    * @var array $postcodes
+    * @var string $path
+    */
     protected $postcodes;
+    protected $path;
 
     /**
     * @method __construct
@@ -43,7 +51,6 @@ class PostcodeFactory
                 $this->postcodes[] = $this->formatPostcode($postcode);
             }
         }
-
         return new ArrayCollection($this->postcodes);
     }
 
@@ -51,6 +58,7 @@ class PostcodeFactory
     * Retrieve postcode data from a specified file
     * @method retrieveFileData
     * @return array
+    * @throws Exception on file not existing
     */
     public function retrieveFileData()
     {
@@ -61,7 +69,9 @@ class PostcodeFactory
     }
 
     /**
-    * Format the postcode correctly
+    * Format the postcode to a uniform format
+    *
+    * Removes the spaces and makes uppercase
     * @method formatPostcode
     * @param string $postcode
     * @return string
@@ -96,14 +106,18 @@ class PostcodeFactory
         $data = [];
 
         foreach ($responseValues['result'] as $key => $responseValue) {
-            $data[] = new PostcodeCrimeData($client, $responseValue['result'], $fromDate, $toDate);
+            try {
+                $data[] = new PostcodeCrimeData($client, $responseValue['result'], $fromDate, $toDate);
+            } catch (Exception $e) {
+                continue;
+            }
         }
 
         return new ArrayCollection($data);
     }
 
     /**
-    * Exports Postcode Statistics to a CSV file
+    * Exports Postcode Statistics to a specified filepath
     * @method exportToCsvFile
     * @param Doctrine\Common\Collections\ArrayCollection $postcodes
     * @param string $filepath
@@ -115,6 +129,9 @@ class PostcodeFactory
             $values = [['postcode', 'category', 'average']];
 
             foreach ($postcodes as $key => $postcode) {
+                if (get_class($postcode) != 'PostcodeCrimeData') {
+                    continue;
+                }
                 $values[] = [
                     $postcode->getPostcode(),
                     $postcode->getMostCommonCrime(),
@@ -129,6 +146,9 @@ class PostcodeFactory
             }
             fclose($fp);
         } catch (Exception $e) {
+            if (isset($fp)) {
+                fclose($fp);
+            }
             return false;
         }
         return true;
