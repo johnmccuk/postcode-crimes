@@ -1,5 +1,5 @@
 # postcode-crimes
-Demo which accepts a txt file of postcodes and returns the most common crime and monthly average from the supplied date range year.
+Demo which accepts a txt file of postcodes and returns the most common crime and monthly average from the supplied date range year by John McCracken.
 
 See `src/postcodes.txt` for an example input file.
 See `src/postcodes-example-output.csv` for an example output file.
