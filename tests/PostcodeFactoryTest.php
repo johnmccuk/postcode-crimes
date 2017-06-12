@@ -96,6 +96,7 @@ class PostcodeFactoryTest extends TestCase
         /*
         * @todo
         * Found a bug, the factory creates a johnmccuk\PostcodeCrimeData class which calls the live API
+        * Never noticed this as the expected values are the same.
         * TODO mock the API call within the johnmccuk\PostcodeCrimeData objects
         */
 
