@@ -88,10 +88,16 @@ class PostcodeFactoryTest extends TestCase
 
         $mockedGuzzle->method('post')
              ->willReturn(new \GuzzleHttp\Psr7\Response(200, [], $mockedResponseText));
-        
+
         $result = $this->mockedPostcodeFactory->generatePostcodeCrimeData($mockedGuzzle, $this->mockedPostcodeFactory->retrievePostcodes(), new DateTime('2016-01-01'), new DateTime('2016-03-31'));
-        
+
         $this->assertEquals(3, $result->count());
+
+        /*
+        * @todo
+        * Found a bug, the factory creates a johnmccuk\PostcodeCrimeData class which calls the live API
+        * TODO mock the API call within the johnmccuk\PostcodeCrimeData objects
+        */
 
         $first = $result->first();
         $this->assertEquals('johnmccuk\PostcodeCrimeData', get_class($first));
